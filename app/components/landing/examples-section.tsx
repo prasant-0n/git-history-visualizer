@@ -1,5 +1,6 @@
 'use client'
 
+import { useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card } from '@/components/ui/card'
 import { Star, ArrowRight } from 'lucide-react'
@@ -11,7 +12,7 @@ const examples = [
     name: 'React',
     description: 'A declarative, efficient JavaScript library for building user interfaces',
     stars: '220k',
-    color: 'from-blue-500 to-cyan-500',
+    color: 'from-blue-600 to-cyan-500',
   },
   {
     owner: 'microsoft',
@@ -19,7 +20,7 @@ const examples = [
     name: 'VS Code',
     description: 'Visual Studio Code - Open Source code editor',
     stars: '160k',
-    color: 'from-purple-500 to-pink-500',
+    color: 'from-purple-600 to-pink-500',
   },
   {
     owner: 'vercel',
@@ -27,12 +28,19 @@ const examples = [
     name: 'Next.js',
     description: 'The React Framework for production',
     stars: '130k',
-    color: 'from-green-500 to-teal-500',
+    color: 'from-green-600 to-teal-500',
   },
 ]
 
 export function ExamplesSection() {
   const router = useRouter()
+  const [isPending, startTransition] = useTransition()
+  
+  const handleNavigate = (owner: string, repo: string) => {
+    startTransition(() => {
+      router.push(`/visualize?owner=${owner}&repo=${repo}`)
+    })
+  }
 
   return (
     <section className="py-24 px-6 sm:px-8 bg-bg-primary relative">
@@ -62,8 +70,16 @@ export function ExamplesSection() {
             <Card
               key={`${example.owner}/${example.repo}`}
               variant="elevated"
-              className="cursor-pointer group overflow-hidden transition-all duration-normal"
-              onClick={() => router.push(`/visualize?owner=${example.owner}&repo=${example.repo}`)}
+              className={`cursor-pointer group overflow-hidden transition-all duration-normal ${isPending ? 'opacity-60 pointer-events-none' : ''}`}
+              onClick={() => handleNavigate(example.owner, example.repo)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  handleNavigate(example.owner, example.repo)
+                }
+              }}
             >
               {/* Gradient header */}
               <div className={`h-40 sm:h-48 bg-gradient-to-br ${example.color} flex items-center justify-center relative overflow-hidden`}>

@@ -19,23 +19,23 @@ export function ThemeSwitcher() {
 
   return (
     <div className="relative">
-      {/* Theme Switcher Button */}
+      {/* Theme Switcher Button - Professional Design */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2.5 rounded-lg bg-bg-secondary border border-gray-700 hover:border-accent-primary transition-all duration-normal group flex items-center gap-2"
+        className="px-4 py-2.5 rounded-lg bg-gradient-to-r from-bg-secondary to-bg-tertiary border border-accent-primary/20 hover:border-accent-primary hover:from-bg-tertiary hover:to-bg-secondary shadow-md hover:shadow-lg transition-all duration-300 group flex items-center gap-2.5"
         title="Toggle theme"
         aria-label="Toggle theme"
         aria-expanded={isOpen}
       >
         <div className="relative w-5 h-5">
           {/* Animated icon container */}
-          <div className="absolute inset-0 flex items-center justify-center transition-all duration-normal group-hover:scale-110">
-            <CurrentIcon className="w-5 h-5 text-text-secondary group-hover:text-accent-primary" />
+          <div className="absolute inset-0 flex items-center justify-center transition-all duration-300 group-hover:scale-125 group-hover:rotate-180">
+            <CurrentIcon className="w-5 h-5 text-accent-primary group-hover:text-accent-secondary" strokeWidth={2} />
           </div>
         </div>
         
         {/* Desktop label */}
-        <span className="hidden md:inline text-sm font-medium text-text-secondary group-hover:text-text-primary">
+        <span className="hidden md:inline text-sm font-semibold text-text-secondary group-hover:text-text-primary transition-colors duration-300">
           {currentTheme?.label}
         </span>
       </button>
