@@ -3,18 +3,23 @@ import { cn } from '@/lib/utils'
 import { forwardRef } from 'react'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center font-body font-normal transition-colors focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none uppercase tracking-widest',
+  'inline-flex items-center justify-center font-body font-medium transition-all focus-visible:outline-none disabled:opacity-50 disabled:pointer-events-none gap-2 whitespace-nowrap',
   {
     variants: {
       variant: {
-        primary: 'bg-black text-white border-2 border-black hover:bg-gray-900 duration-fast',
-        secondary: 'bg-white text-black border-2 border-black hover:bg-black hover:text-white duration-fast',
-        ghost: 'border-2 border-transparent hover:bg-black hover:text-white duration-fast hover:underline',
+        primary: 'bg-gradient-to-r from-accent-primary to-accent-secondary text-bg-primary hover:shadow-lg hover-lift active:scale-95 disabled:from-gray-700 disabled:to-gray-700',
+        secondary: 'bg-bg-secondary border border-gray-700 text-text-primary hover:bg-bg-hover hover:border-accent-primary hover-lift transition-all active:scale-95',
+        accent: 'bg-accent-primary text-bg-primary hover:shadow-glow hover-lift active:scale-95 disabled:bg-gray-700',
+        ghost: 'text-accent-primary hover:bg-bg-hover border border-transparent hover:border-accent-primary transition-all active:scale-95',
+        outline: 'border border-accent-primary text-accent-primary hover:bg-accent-primary hover:text-bg-primary transition-all active:scale-95',
+        danger: 'bg-accent-error text-white hover:shadow-lg hover-lift active:scale-95 disabled:bg-gray-700',
       },
       size: {
+        xs: 'px-3 py-1.5 text-xs',
         sm: 'px-4 py-2 text-sm',
         md: 'px-6 py-3 text-base',
         lg: 'px-8 py-4 text-lg',
+        xl: 'px-10 py-5 text-xl',
       },
     },
     defaultVariants: {
@@ -28,16 +33,26 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
+  isLoading?: boolean
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, isLoading = false, disabled, ...props }, ref) => {
     return (
       <button
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
+        disabled={isLoading || disabled}
         {...props}
-      />
+      >
+        {isLoading && (
+          <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        )}
+        {props.children}
+      </button>
     )
   }
 )

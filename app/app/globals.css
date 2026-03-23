@@ -4,18 +4,35 @@
 
 @layer base {
   :root {
-    /* Color System - Minimalist Monochrome */
-    --color-black: 0 0% 0%;        /* #000000 */
-    --color-white: 0 0% 100%;      /* #FFFFFF */
-    --color-gray-100: 0 0% 96%;    /* #F5F5F5 */
-    --color-gray-200: 0 0% 90%;    /* #E5E5E5 */
-    --color-gray-300: 0 0% 75%;    /* #BFBFBF */
-    --color-gray-400: 0 0% 32%;    /* #525252 - muted foreground */
-    --color-gray-500: 0 0% 50%;    /* #808080 */
-    --color-gray-600: 0 0% 40%;    /* #666666 */
-    --color-gray-700: 0 0% 25%;    /* #404040 */
-    --color-gray-800: 0 0% 15%;    /* #262626 */
-    --color-gray-900: 0 0% 8%;     /* #141414 */
+    /* Premium Color System - Dark Mode with Vibrant Accents */
+    --bg-primary: 0 0% 2%;         /* #050505 - Ultra dark background */
+    --bg-secondary: 0 0% 8%;       /* #141414 - Slightly lighter for cards */
+    --bg-tertiary: 0 0% 13%;       /* #212121 - For subtle elevation */
+    --bg-hover: 0 0% 18%;          /* #2D2D2D - Hover state */
+    
+    --text-primary: 0 0% 98%;      /* #F7F7F7 - Main text, near white */
+    --text-secondary: 0 0% 70%;    /* #B3B3B3 - Secondary text */
+    --text-tertiary: 0 0% 55%;     /* #8C8C8C - Subtle text */
+    
+    /* Accent Colors - Modern & Vibrant */
+    --accent-primary: 199 89% 48%;    /* #0D9488 - Teal - Primary brand */
+    --accent-secondary: 217 91% 60%;  /* #3B82F6 - Blue - Secondary */
+    --accent-tertiary: 168 86% 56%;   /* #EC4899 - Pink - Tertiary */
+    --accent-success: 142 72% 29%;    /* #16A34A - Green */
+    --accent-warning: 38 92% 50%;     /* #F59E0B - Amber */
+    --accent-error: 0 84% 60%;        /* #EF4444 - Red */
+    
+    /* Neutral Grays */
+    --gray-50: 0 0% 98%;            /* #FAFAFA */
+    --gray-100: 0 0% 96%;           /* #F5F5F5 */
+    --gray-200: 0 0% 90%;           /* #E5E5E5 */
+    --gray-300: 0 0% 85%;           /* #D9D9D9 */
+    --gray-400: 0 0% 75%;           /* #BFBFBF */
+    --gray-500: 0 0% 50%;           /* #808080 */
+    --gray-600: 0 0% 40%;           /* #666666 */
+    --gray-700: 0 0% 30%;           /* #4D4D4D */
+    --gray-800: 0 0% 20%;           /* #333333 */
+    --gray-900: 0 0% 10%;           /* #1A1A1A */
 
     /* Typography */
     --font-display: var(--font-display);
@@ -36,133 +53,206 @@
     --border-normal: 2px;
     --border-thick: 4px;
     --border-extra-thick: 8px;
+    --border-color: hsl(var(--gray-700));
 
-    /* Focus States */
-    --focus-outline-width: 3px;
-    --focus-outline-offset: 3px;
+    /* Focus States - Teal accent */
+    --focus-outline-width: 2px;
+    --focus-outline-offset: 2px;
+    --focus-outline-color: hsl(var(--accent-primary));
 
-    /* Transitions */
+    /* Transitions - Smooth animations */
     --transition-instant: 0ms;
     --transition-fast: 100ms;
     --transition-normal: 200ms;
     --transition-smooth: 300ms;
+    --transition-slower: 500ms;
+
+    /* Shadows - Professional elevation */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.7);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.8);
   }
 
-  /* CRITICAL: No rounded corners anywhere */
+  /* Base styles with modern typography */
   * {
     border-radius: 0 !important;
   }
 
   body {
-    font-family: var(--font-body), Georgia, serif;
-    color: hsl(var(--color-black));
-    background-color: hsl(var(--color-white));
+    font-family: var(--font-body), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: hsl(var(--text-primary));
+    background-color: hsl(var(--bg-primary));
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display), Georgia, serif;
+    font-family: var(--font-display), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     line-height: 1.2;
-    font-weight: 600;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: hsl(var(--text-primary));
   }
 
   code, pre, kbd, samp {
-    font-family: var(--font-mono), monospace;
+    font-family: var(--font-mono), 'Courier New', monospace;
+  }
+
+  a {
+    color: hsl(var(--accent-primary));
+    transition: color var(--transition-normal);
+  }
+
+  a:hover {
+    color: hsl(199 89% 58%);
   }
 
   /* Focus States for Accessibility */
   *:focus-visible {
-    outline: var(--focus-outline-width) solid hsl(var(--color-black));
+    outline: var(--focus-outline-width) solid var(--focus-outline-color);
     outline-offset: var(--focus-outline-offset);
   }
 
-  /* Ensure inputs and buttons have proper focus */
   button:focus-visible,
   a:focus-visible,
   input:focus-visible,
   textarea:focus-visible,
   select:focus-visible {
-    outline: var(--focus-outline-width) solid hsl(var(--color-black));
+    outline: var(--focus-outline-width) solid var(--focus-outline-color);
     outline-offset: var(--focus-outline-offset);
   }
+
+  /* Selection styling */
+  ::selection {
+    background-color: hsl(var(--accent-primary));
+    color: hsl(var(--bg-primary));
+  }
 }
 
-/* Background Textures */
+/* Modern utilities */
 @layer utilities {
-  .bg-texture-lines {
-    background-image: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      hsl(var(--color-gray-100)) 2px,
-      hsl(var(--color-gray-100)) 4px
-    );
+  /* Background gradients */
+  .bg-gradient-accent {
+    background: linear-gradient(135deg, hsl(var(--accent-primary)), hsl(var(--accent-secondary)));
   }
 
-  .bg-texture-grid {
-    background-image:
-      repeating-linear-gradient(0deg, hsl(var(--color-gray-200)) 0 1px, transparent 1px 100%),
-      repeating-linear-gradient(90deg, hsl(var(--color-gray-200)) 0 1px, transparent 1px 100%);
-    background-size: 40px 40px;
+  .bg-gradient-subtle {
+    background: linear-gradient(180deg, hsl(var(--bg-secondary)), hsl(var(--bg-tertiary)));
   }
 
-  .bg-texture-noise {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
+  /* Glass morphism effect */
+  .glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  /* Color Inversion Utility */
-  .invert-colors {
-    background-color: hsl(var(--color-black));
-    color: hsl(var(--color-white));
+  /* Elevated card styling */
+  .elevated {
+    box-shadow: var(--shadow-lg);
+    background-color: hsl(var(--bg-secondary));
   }
 
-  .invert-colors-hover {
-    transition: background-color var(--transition-fast), color var(--transition-fast);
+  /* Text utilities */
+  .text-balance {
+    text-wrap: balance;
   }
 
-  .invert-colors-hover:hover {
-    background-color: hsl(var(--color-black));
-    color: hsl(var(--color-white));
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(var(--accent-primary)), hsl(var(--accent-secondary)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
-  /* Grayscale filter utilities */
-  .grayscale {
-    filter: grayscale(100%);
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn var(--transition-smooth) ease-in-out;
   }
 
-  .grayscale-hover {
-    filter: grayscale(100%);
-    transition: filter var(--transition-smooth);
+  .animate-slide-up {
+    animation: slideUp var(--transition-smooth) ease-out;
   }
 
-  .grayscale-hover:hover {
-    filter: grayscale(0%);
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite;
+  }
+
+  /* Hover effects */
+  .hover-lift {
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .hover-glow {
+    transition: box-shadow var(--transition-normal);
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 0 20px rgba(13, 148, 136, 0.3);
   }
 }
 
-/* Custom Scrollbar (Monochrome) */
+/* Keyframe animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(13, 148, 136, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(13, 148, 136, 0.8);
+  }
+}
+
+/* Custom Scrollbar - Modern dark theme */
 @layer base {
   ::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
   }
 
   ::-webkit-scrollbar-track {
-    background: hsl(var(--color-gray-100));
+    background: hsl(var(--bg-primary));
   }
 
   ::-webkit-scrollbar-thumb {
-    background: hsl(var(--color-gray-400));
-    border: 2px solid hsl(var(--color-gray-100));
+    background: hsl(var(--gray-700));
+    border-radius: 2px;
+    transition: background var(--transition-normal);
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--color-black));
+    background: hsl(var(--accent-primary));
   }
 
   /* Firefox scrollbar */
   * {
     scrollbar-width: thin;
-    scrollbar-color: hsl(var(--color-gray-400)) hsl(var(--color-gray-100));
+    scrollbar-color: hsl(var(--gray-700)) hsl(var(--bg-primary));
   }
 }
