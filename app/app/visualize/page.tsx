@@ -20,8 +20,10 @@ function VisualizerContent() {
   const repo = searchParams.get('repo')
 
   const [isMobile, setIsMobile] = useState(false)
+  const [isHydrated, setIsHydrated] = useState(false)
 
   useEffect(() => {
+    setIsHydrated(true)
     setIsMobile(window.innerWidth < 768)
 
     const handleResize = () => {

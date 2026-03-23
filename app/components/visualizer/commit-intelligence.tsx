@@ -6,6 +6,7 @@ import { SizeDistribution } from './insights/size-distribution'
 import { PeakHoursClock } from './insights/peak-hours-clock'
 import { MessageQuality } from './insights/message-quality'
 import { VelocityTrend } from './insights/velocity-trend'
+import { TrendingUp } from 'lucide-react'
 
 interface CommitIntelligenceProps {
   commits: CommitNode[]
@@ -13,12 +14,11 @@ interface CommitIntelligenceProps {
 }
 
 export function CommitIntelligence({ commits, insights }: CommitIntelligenceProps) {
-  // Group commits by month for timeline chart
   const monthlyData = useMemo(() => {
     const groups = new Map<string, { count: number; contributors: Set<number> }>()
 
     commits.forEach(commit => {
-      const month = commit.date.toISOString().substring(0, 7) // YYYY-MM
+      const month = commit.date.toISOString().substring(0, 7)
       if (!groups.has(month)) {
         groups.set(month, { count: 0, contributors: new Set() })
       }
@@ -35,21 +35,18 @@ export function CommitIntelligence({ commits, insights }: CommitIntelligenceProp
   }, [commits])
 
   const maxCount = Math.max(...monthlyData.map(d => d.count), 1)
-
   const [hoveredMonth, setHoveredMonth] = useState<typeof monthlyData[0] | null>(null)
 
-  // Helper function to generate line path
   const generateLinePath = (data: typeof monthlyData, max: number) => {
     if (data.length === 0) return ''
     const points = data.map((d, i) => {
       const x = (i / Math.max(data.length - 1, 1)) * 1000
-      const y = 300 - ((d.count / max) * 280) // 280 max height, 20px padding
+      const y = 300 - ((d.count / max) * 280)
       return `${x},${y}`
     })
     return `M ${points.join(' L ')}`
   }
 
-  // Helper function to generate area path
   const generateAreaPath = (data: typeof monthlyData, max: number) => {
     if (data.length === 0) return ''
     const linePath = generateLinePath(data, max)
@@ -57,40 +54,49 @@ export function CommitIntelligence({ commits, insights }: CommitIntelligenceProp
     return `${linePath} L ${lastX},300 L 0,300 Z`
   }
 
-  // Get color based on timeline position
   const getPointColor = (index: number) => {
     const progress = index / Math.max(monthlyData.length - 1, 1)
-    if (progress < 0.33) return '#6EE7B7' // Mint green (early)
-    if (progress < 0.66) return '#7DD3FC' // Sky blue (middle)
-    return '#C4B5FD' // Lavender (recent)
+    if (progress < 0.33) return '#10b981'
+    if (progress < 0.66) return '#3b82f6'
+    return '#8b5cf6'
   }
 
   return (
-    <div className="h-auto border-2 border-white bg-black overflow-hidden">
+    <div className="bg-gradient-to-br from-bg-secondary to-bg-tertiary border border-gray-700 rounded-lg overflow-hidden hover-lift transition-all duration-normal">
       {/* Header */}
-      <div className="p-3 border-b-2 border-white">
-        <h2 className="font-display text-2xl font-bold">Commit Intelligence</h2>
-        <p className="font-mono text-sm text-gray-400 mt-1">
-          {commits.length.toLocaleString()} commits analyzed
-        </p>
+      <div className="p-6 pb-4 border-b border-gray-700">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded flex items-center justify-center bg-gradient-to-br from-accent-primary/20 to-accent-secondary/10">
+              <TrendingUp className="w-5 h-5 text-accent-primary" />
+            </div>
+            <div>
+              <h2 className="font-display text-2xl font-bold text-text-primary">
+                Commit Intelligence
+              </h2>
+              <p className="text-sm text-text-tertiary mt-1">
+                {commits.length.toLocaleString()} commits analyzed
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Timeline Chart */}
-      <div className="p-3 relative h-[160px]">
+      <div className="p-6 relative h-80 bg-gradient-to-b from-bg-secondary/50 to-transparent">
         <svg
           className="w-full h-full"
           viewBox="0 0 1000 320"
           preserveAspectRatio="none"
         >
-          {/* Gradient definition */}
           <defs>
             <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#6EE7B7" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#6EE7B7" stopOpacity="0.05" />
+              <stop offset="0%" stopColor="#10b981" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#10b981" stopOpacity="0.05" />
             </linearGradient>
           </defs>
 
-          {/* Reference grid lines */}
+          {/* Grid */}
           {[0, 25, 50, 75, 100].map(y => (
             <line
               key={y}
@@ -98,12 +104,12 @@ export function CommitIntelligence({ commits, insights }: CommitIntelligenceProp
               y1={300 - (y * 2.8)}
               x2="1000"
               y2={300 - (y * 2.8)}
-              stroke="#333"
+              stroke="rgba(107, 114, 128, 0.2)"
               strokeWidth="1"
             />
           ))}
 
-          {/* Area fill */}
+          {/* Area */}
           <path
             d={generateAreaPath(monthlyData, maxCount)}
             fill="url(#areaGradient)"
@@ -113,11 +119,13 @@ export function CommitIntelligence({ commits, insights }: CommitIntelligenceProp
           <path
             d={generateLinePath(monthlyData, maxCount)}
             fill="none"
-            stroke="white"
-            strokeWidth="2"
+            stroke="#10b981"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
 
-          {/* Data points */}
+          {/* Points */}
           {monthlyData.map((data, index) => {
             const x = (index / Math.max(monthlyData.length - 1, 1)) * 1000
             const y = 300 - ((data.count / maxCount) * 280)
@@ -128,35 +136,35 @@ export function CommitIntelligence({ commits, insights }: CommitIntelligenceProp
                 <circle
                   cx={x}
                   cy={y}
-                  r="4"
+                  r="6"
                   fill={color}
-                  className="cursor-pointer transition-all"
-                  style={{ filter: 'drop-shadow(0 0 4px rgba(255,255,255,0.5))' }}
+                  className="cursor-pointer hover:r-8 transition-all"
+                  style={{ filter: 'drop-shadow(0 0 8px rgba(16, 185, 129, 0.5))' }}
                   onMouseEnter={() => setHoveredMonth(data)}
                   onMouseLeave={() => setHoveredMonth(null)}
                 />
                 {hoveredMonth === data && (
                   <g>
-                    {/* Tooltip background */}
                     <rect
-                      x={Math.min(Math.max(x - 60, 0), 880)}
-                      y={Math.max(y - 60, 10)}
-                      width="120"
-                      height="50"
-                      fill={color}
+                      x={Math.min(Math.max(x - 75, 0), 850)}
+                      y={Math.max(y - 75, 10)}
+                      width="150"
+                      height="65"
+                      fill="hsl(var(--bg-secondary))"
+                      stroke={color}
+                      strokeWidth="2"
                       rx="4"
                     />
-                    {/* Tooltip text */}
                     <text
-                      x={Math.min(Math.max(x, 60), 940)}
-                      y={Math.max(y - 40, 30)}
+                      x={Math.min(Math.max(x, 75), 925)}
+                      y={Math.max(y - 55, 30)}
                       textAnchor="middle"
                       className="font-mono text-xs font-bold"
-                      fill="#000"
+                      fill={color}
                     >
-                      <tspan x={Math.min(Math.max(x, 60), 940)} dy="0">{data.month}</tspan>
-                      <tspan x={Math.min(Math.max(x, 60), 940)} dy="15">{data.count} commits</tspan>
-                      <tspan x={Math.min(Math.max(x, 60), 940)} dy="15">{data.contributorCount} contributors</tspan>
+                      <tspan x={Math.min(Math.max(x, 75), 925)} dy="0">{data.month}</tspan>
+                      <tspan x={Math.min(Math.max(x, 75), 925)} dy="14" fill="hsl(var(--text-primary))">{data.count} commits</tspan>
+                      <tspan x={Math.min(Math.max(x, 75), 925)} dy="14" fill="hsl(var(--text-secondary))">{data.contributorCount} contributors</tspan>
                     </text>
                   </g>
                 )}
@@ -165,20 +173,18 @@ export function CommitIntelligence({ commits, insights }: CommitIntelligenceProp
           })}
         </svg>
 
-        {/* Month labels */}
-        <div className="absolute bottom-0 left-4 right-4 h-10 pointer-events-none">
-          {monthlyData.filter((_, i) => i % 3 === 0).map((data, idx) => {
-            const originalIndex = idx * 3
+        {/* Labels */}
+        <div className="absolute bottom-0 left-6 right-6 h-12 pointer-events-none">
+          {monthlyData.filter((_, i) => i % Math.max(1, Math.floor(monthlyData.length / 4)) === 0).map((data, idx) => {
+            const originalIndex = idx * Math.max(1, Math.floor(monthlyData.length / 4))
             const x = (originalIndex / Math.max(monthlyData.length - 1, 1)) * 100
             return (
               <div
                 key={data.month}
-                className="absolute text-xs font-mono text-gray-500 whitespace-nowrap"
+                className="absolute text-xs font-mono text-text-tertiary whitespace-nowrap"
                 style={{
                   left: `${x}%`,
-                  transform: 'rotate(-45deg)',
-                  transformOrigin: 'top left',
-                  marginTop: '4px'
+                  transform: 'translateX(-50%)',
                 }}
               >
                 {data.month}
@@ -189,11 +195,19 @@ export function CommitIntelligence({ commits, insights }: CommitIntelligenceProp
       </div>
 
       {/* Insights Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 border-t-2 border-white">
-        <SizeDistribution data={insights.sizeDistribution} totalCommits={commits.length} />
-        <PeakHoursClock data={insights.peakHours} />
-        <MessageQuality data={insights.messageQuality} />
-        <VelocityTrend data={insights.velocityTrend} />
+      <div className="grid grid-cols-1 md:grid-cols-2 border-t border-gray-700">
+        <div className="border-r border-gray-700 md:border-b md:border-r">
+          <SizeDistribution data={insights.sizeDistribution} totalCommits={commits.length} />
+        </div>
+        <div className="md:border-b">
+          <PeakHoursClock data={insights.peakHours} />
+        </div>
+        <div className="border-r border-gray-700">
+          <MessageQuality data={insights.messageQuality} />
+        </div>
+        <div>
+          <VelocityTrend data={insights.velocityTrend} />
+        </div>
       </div>
     </div>
   )

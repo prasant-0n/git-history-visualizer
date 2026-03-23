@@ -76,7 +76,12 @@
 
   /* Base styles with modern typography */
   * {
-    border-radius: 0 !important;
+    @apply rounded-none;
+  }
+
+  /* Allow rounded corners for UI elements */
+  button, input, textarea, select, [role="dialog"], .rounded-lg {
+    border-radius: 0.5rem !important;
   }
 
   body {
@@ -180,6 +185,10 @@
     animation: glow 2s ease-in-out infinite;
   }
 
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
   /* Hover effects */
   .hover-lift {
     transition: transform var(--transition-normal), box-shadow var(--transition-normal);
@@ -196,6 +205,10 @@
 
   .hover-glow:hover {
     box-shadow: 0 0 20px rgba(13, 148, 136, 0.3);
+  }
+
+  .shadow-glow {
+    box-shadow: 0 0 12px rgba(13, 148, 136, 0.4), 0 0 24px rgba(13, 148, 136, 0.2);
   }
 }
 

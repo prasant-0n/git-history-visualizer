@@ -8,7 +8,7 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ className, hoverable = false, variant = 'default', ...props }, ref) => {
-    const baseStyles = 'bg-bg-secondary border border-gray-700 transition-all duration-normal'
+    const baseStyles = 'bg-bg-secondary border border-gray-700 transition-all duration-normal rounded-lg overflow-hidden'
     
     const variantStyles = {
       default: 'shadow-md',

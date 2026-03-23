@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { FileText } from 'lucide-react'
 
 interface SizeDistributionProps {
   data: {
@@ -16,52 +17,51 @@ export function SizeDistribution({ data, totalCommits }: SizeDistributionProps) 
   const [hovered, setHovered] = useState<string | null>(null)
 
   const categories = [
-    { label: 'Small', count: data.small, color: '#6EE7B7', range: '0-50 lines' },
-    { label: 'Medium', count: data.medium, color: '#7DD3FC', range: '51-200 lines' },
-    { label: 'Large', count: data.large, color: '#FDA4AF', range: '201-500 lines' },
-    { label: 'Huge', count: data.huge, color: '#C4B5FD', range: '500+ lines' },
+    { label: 'Small', count: data.small, color: 'from-emerald-500 to-teal-500', range: '0-50 lines' },
+    { label: 'Medium', count: data.medium, color: 'from-blue-500 to-cyan-500', range: '51-200 lines' },
+    { label: 'Large', count: data.large, color: 'from-orange-500 to-rose-500', range: '201-500 lines' },
+    { label: 'Huge', count: data.huge, color: 'from-purple-500 to-pink-500', range: '500+ lines' },
   ]
 
   const maxCount = Math.max(...categories.map(c => c.count), 1)
 
   return (
-    <div className="border-r-2 md:border-r-2 border-b-2 border-white p-3 bg-black hover:bg-gray-900 transition-colors duration-200 min-h-[90px]">
-      <h3 className="font-mono text-xs text-gray-400 mb-2">COMMIT SIZE</h3>
+    <div className="p-6 border-r border-gray-700 border-b border-gray-700">
+      <div className="flex items-center gap-2 mb-6">
+        <FileText className="w-4 h-4 text-accent-secondary" />
+        <h3 className="text-sm font-semibold text-text-primary uppercase tracking-wider">
+          Commit Size Distribution
+        </h3>
+      </div>
 
-      <div className="space-y-2">
+      <div className="space-y-4">
         {categories.map(cat => {
           const percentage = totalCommits > 0 ? (cat.count / totalCommits) * 100 : 0
           return (
             <div
               key={cat.label}
-              className="relative"
+              className="group"
               onMouseEnter={() => setHovered(cat.label)}
               onMouseLeave={() => setHovered(null)}
             >
-              <div className="flex items-center justify-between mb-1">
-                <span className="font-mono text-xs" style={{ color: cat.color }}>
+              <div className="flex items-center justify-between mb-2">
+                <span className="font-medium text-sm text-text-secondary group-hover:text-accent-secondary transition-colors">
                   {cat.label}
                 </span>
-                <span className="font-mono text-xs text-gray-500">
-                  {percentage.toFixed(0)}%
+                <span className="font-mono text-xs text-text-tertiary">
+                  {cat.count > 0 && `${percentage.toFixed(1)}%`}
                 </span>
               </div>
-              <div className="h-3 border-2 border-gray-800 relative">
+              <div className={`h-2 bg-bg-hover rounded overflow-hidden group-hover:shadow-glow transition-all ${hovered === cat.label ? 'ring-1 ring-accent-secondary/50' : ''}`}>
                 <div
-                  className="h-full transition-all duration-200"
+                  className={`h-full bg-gradient-to-r ${cat.color} transition-all duration-300`}
                   style={{
                     width: `${(cat.count / maxCount) * 100}%`,
-                    backgroundColor: cat.color,
-                    opacity: hovered === cat.label ? 1 : 0.7,
                   }}
                 />
               </div>
-
-              {hovered === cat.label && (
-                <div
-                  className="absolute -top-10 left-1/2 -translate-x-1/2 px-3 py-1.5 text-xs font-mono whitespace-nowrap border-2 border-white z-10"
-                  style={{ backgroundColor: cat.color, color: '#000' }}
-                >
+              {hovered === cat.label && cat.count > 0 && (
+                <div className="text-xs text-text-tertiary mt-1.5">
                   {cat.count.toLocaleString()} commits • {cat.range}
                 </div>
               )}
