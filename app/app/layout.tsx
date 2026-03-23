@@ -48,8 +48,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={`${playfairDisplay.variable} ${sourceSerif4.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${playfairDisplay.variable} ${sourceSerif4.variable} ${jetbrainsMono.variable} transition-colors duration-300`}>
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>

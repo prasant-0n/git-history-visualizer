@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    /* Premium Color System - Dark Mode with Vibrant Accents */
+    /* Premium Color System - Dark Mode with Vibrant Accents (Default) */
     --bg-primary: 0 0% 2%;         /* #050505 - Ultra dark background */
     --bg-secondary: 0 0% 8%;       /* #141414 - Slightly lighter for cards */
     --bg-tertiary: 0 0% 13%;       /* #212121 - For subtle elevation */
@@ -68,6 +68,46 @@
     --transition-slower: 500ms;
 
     /* Shadows - Professional elevation */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.7);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.8);
+  }
+
+  /* Light Theme - Automatic for light mode preference */
+  @media (prefers-color-scheme: light) {
+    :root {
+      /* Light Mode Colors */
+      --bg-primary: 0 0% 98%;       /* #FAFAFA - Clean white background */
+      --bg-secondary: 0 0% 100%;    /* #FFFFFF - Pure white for cards */
+      --bg-tertiary: 0 0% 95%;      /* #F2F2F2 - Subtle elevation */
+      --bg-hover: 0 0% 92%;         /* #EBEBEB - Hover state */
+      
+      --text-primary: 0 0% 8%;      /* #141414 - Deep dark text */
+      --text-secondary: 0 0% 35%;   /* #595959 - Secondary text */
+      --text-tertiary: 0 0% 50%;    /* #808080 - Subtle text */
+      
+      /* Shadows adjust for light theme */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.12);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+      --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.18);
+    }
+  }
+
+  /* Dark Theme - Explicit dark class */
+  html.dark {
+    /* Dark Mode Colors */
+    --bg-primary: 0 0% 2%;         /* #050505 - Ultra dark background */
+    --bg-secondary: 0 0% 8%;       /* #141414 - Slightly lighter for cards */
+    --bg-tertiary: 0 0% 13%;       /* #212121 - For subtle elevation */
+    --bg-hover: 0 0% 18%;          /* #2D2D2D - Hover state */
+    
+    --text-primary: 0 0% 98%;      /* #F7F7F7 - Main text, near white */
+    --text-secondary: 0 0% 70%;    /* #B3B3B3 - Secondary text */
+    --text-tertiary: 0 0% 55%;     /* #8C8C8C - Subtle text */
+    
+    /* Shadows for dark theme */
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
     --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.6);
     --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.7);
