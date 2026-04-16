@@ -1,6 +1,7 @@
 'use client'
 
 import type { GitHubRepo } from '@/types/github'
+import { Star, GitFork, Users, Database } from 'lucide-react'
 
 interface StatsCardProps {
   data: GitHubRepo
@@ -8,59 +9,73 @@ interface StatsCardProps {
 }
 
 export function StatsCard({ data, contributors }: StatsCardProps) {
+  const stats = [
+    { label: 'Stars', value: data.stars, icon: Star, color: 'text-yellow-400' },
+    { label: 'Forks', value: data.forks, icon: GitFork, color: 'text-blue-400' },
+    { label: 'Contributors', value: contributors, icon: Users, color: 'text-emerald-400' },
+  ]
+
   return (
-    <div className="h-auto min-h-[180px] border-2 border-white bg-black p-4 overflow-auto hover:border-[#5EEAD4] transition-colors duration-200" style={{ borderTop: '4px solid #5EEAD4' }}>
-      <h2 className="font-display text-xl font-bold mb-4 border-b-2 border-white pb-2">
-        Repository Stats
-      </h2>
+    <div className="bg-gradient-to-br from-bg-secondary to-bg-tertiary border border-gray-700 rounded-lg overflow-hidden hover:border-accent-primary transition-all duration-normal hover-lift">
+      {/* Header with gradient accent line */}
+      <div className="p-6 pb-4 border-b border-gray-700">
+        <h2 className="font-display text-2xl font-bold text-text-primary flex items-center gap-2">
+          <Database className="w-6 h-6 text-accent-primary" />
+          Repository Stats
+        </h2>
+      </div>
 
-      <div className="space-y-3">
-        {/* Stars */}
-        <div className="flex items-center justify-between">
-          <span className="font-body text-gray-400">Stars</span>
-          <span className="font-mono text-3xl font-bold" style={{ color: '#6EE7B7' }}>
-            {data.stars.toLocaleString()}
-          </span>
-        </div>
+      {/* Stats Grid */}
+      <div className="p-6 space-y-4">
+        {stats.map((stat, index) => {
+          const Icon = stat.icon
+          return (
+            <div key={stat.label} className="group">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-text-secondary flex items-center gap-2">
+                  <Icon className={`w-4 h-4 ${stat.color}`} />
+                  {stat.label}
+                </span>
+              </div>
+              <div className="text-3xl md:text-4xl font-bold text-gradient mb-2">
+                {stat.value.toLocaleString()}
+              </div>
+              <div className="h-1 bg-bg-hover rounded overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-accent-primary to-accent-secondary"
+                  style={{ width: `${Math.min((stat.value / 10000) * 100, 100)}%` }}
+                />
+              </div>
+            </div>
+          )
+        })}
+      </div>
 
-        {/* Forks */}
-        <div className="flex items-center justify-between">
-          <span className="font-body text-gray-400">Forks</span>
-          <span className="font-mono text-3xl font-bold" style={{ color: '#7DD3FC' }}>
-            {data.forks.toLocaleString()}
-          </span>
-        </div>
+      {/* Divider */}
+      <div className="border-t border-gray-700" />
 
-        {/* Contributors */}
-        <div className="flex items-center justify-between">
-          <span className="font-body text-gray-400">Contributors</span>
-          <span className="font-mono text-3xl font-bold" style={{ color: '#5EEAD4' }}>
-            {contributors}
-          </span>
-        </div>
-
-        {/* Language Badge */}
+      {/* Details */}
+      <div className="p-6 space-y-3">
         {data.language && (
-          <div className="mt-4 pt-3 border-t border-white">
-            <div className="px-3 py-1 inline-block font-mono text-sm font-semibold text-black" style={{ background: 'linear-gradient(135deg, #6EE7B7 0%, #7DD3FC 100%)' }}>
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-text-secondary">Language</span>
+            <div className="px-3 py-1 bg-gradient-to-r from-accent-primary to-accent-secondary text-bg-primary text-xs font-bold rounded">
               {data.language}
             </div>
           </div>
         )}
 
-        {/* Size */}
         <div className="flex items-center justify-between text-sm">
-          <span className="font-body text-gray-500">Size</span>
-          <span className="font-mono text-gray-400">
+          <span className="text-text-secondary">Repository Size</span>
+          <span className="font-mono text-text-primary">
             {(data.size / 1024).toFixed(1)} MB
           </span>
         </div>
 
-        {/* Last Updated */}
         <div className="flex items-center justify-between text-sm">
-          <span className="font-body text-gray-500">Updated</span>
-          <span className="font-mono text-gray-400">
-            {new Date(data.updatedAt).toLocaleDateString()}
+          <span className="text-text-secondary">Last Updated</span>
+          <span className="font-mono text-text-primary">
+            {new Date(data.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' })}
           </span>
         </div>
       </div>

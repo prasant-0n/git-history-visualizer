@@ -22,17 +22,23 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Git History Visualizer - 3D Repository Explorer',
-  description: 'Transform any GitHub repository into an interactive 3D constellation. Explore commits, branches, and contributors across time.',
-  keywords: ['git', 'github', 'visualization', '3d', 'commits', 'history', 'three.js'],
-  authors: [{ name: 'Git History Visualizer' }],
+  title: 'Git History Visualizer - Beautiful Repository Analytics',
+  description: 'Transform any GitHub repository into stunning interactive dashboards with commit intelligence, contributor insights, and activity heatmaps. No sign-up required.',
+  keywords: ['git', 'github', 'visualization', 'analytics', 'commits', 'history', 'open source', 'dashboard'],
+  authors: [{ name: 'Git History Visualizer Team' }],
   openGraph: {
-    title: 'Git History Visualizer',
-    description: 'Transform GitHub repos into stunning 3D constellations',
+    title: 'Git History Visualizer - Beautiful Repository Analytics',
+    description: 'Visualize commits, contributors, and git history with professional interactive dashboards',
     type: 'website',
+    url: 'https://git-history-visualizer.vercel.app',
   },
   icons: {
     icon: '/icon.svg',
+  },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
   },
 }
 
@@ -42,8 +48,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={`${playfairDisplay.variable} ${sourceSerif4.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${playfairDisplay.variable} ${sourceSerif4.variable} ${jetbrainsMono.variable} transition-colors duration-300`}>
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
